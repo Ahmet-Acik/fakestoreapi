@@ -386,5 +386,23 @@ public class FakeStoreApiCrudTests {
                 .then()
                 .statusCode(401);
     }
+    // XSS
+    @Test
+    public void testLogin_UnhappyPath_XSS() {
+        String payload = """
+                {
+                    "username": "<script>alert('XSS')</script>",
+                    "password": "<script>alert('XSS')</script>"
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(401);
+    }
+
 
 }
