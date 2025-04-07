@@ -11,13 +11,19 @@ import static org.assertj.core.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FakeStoreApiCrudTests {
 
+    private static final String BASE_URI = "https://fakestoreapi.com";
+    private static final String PRODUCTS_ENDPOINT = "/products";
+    private static final String USERS_ENDPOINT = "/users";
+    private static final String CARTS_ENDPOINT = "/carts";
+    private static final String AUTH_ENDPOINT = "/auth/login";
+
     private static int createdProductId;
     private static int createdUserId;
     private static int createdCartId;
 
     @BeforeAll
     public static void setup() {
-        RestAssured.baseURI = "https://fakestoreapi.com";
+        RestAssured.baseURI = BASE_URI;
     }
 
     // PRODUCTS TESTS
@@ -37,7 +43,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/products")
+                .post(PRODUCTS_ENDPOINT)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -50,23 +56,10 @@ public class FakeStoreApiCrudTests {
     @Order(2)
     public void testGetProductById_HappyPath() {
         given()
-                .get("/products/" + createdProductId)
+                .get(PRODUCTS_ENDPOINT + "/" + createdProductId)
                 .then()
                 .statusCode(200);
     }
-
-//@Test
-//public void testGetProductById_UnhappyPath_BadRequest() {
-//    // Use an invalid product ID
-//    String invalidProductId = "invalid-id";
-//
-//    given()
-//        .pathParam("id", invalidProductId)
-//    .when()
-//        .get("/products/{id}")
-//    .then()
-//        .statusCode(400); // Expecting 400 Bad Request
-//}
 
     @Test
     @Order(3)
@@ -84,7 +77,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(updatedPayload)
-                .put("/products/" + createdProductId)
+                .put(PRODUCTS_ENDPOINT + "/" + createdProductId)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -95,7 +88,7 @@ public class FakeStoreApiCrudTests {
     @Test
     public void testDeleteProduct_UnhappyPath_BadRequest() {
         given()
-                .delete("/products/invalid-id")
+                .delete(PRODUCTS_ENDPOINT + "/invalid-id")
                 .then()
                 .statusCode(400);
     }
@@ -104,24 +97,10 @@ public class FakeStoreApiCrudTests {
     @Order(4)
     public void testDeleteProduct_HappyPath() {
         given()
-                .delete("/products/" + createdProductId)
+                .delete(PRODUCTS_ENDPOINT + "/" + createdProductId)
                 .then()
                 .statusCode(200);
     }
-
-//   @Test
-//   public void testCreateProduct_UnhappyPath_MissingTitle() {
-//       // Create a product without a title
-//       String productJson = "{ \"price\": 29.99 }";
-//
-//       given()
-//           .contentType("application/json")
-//           .body(productJson)
-//       .when()
-//           .post("/products")
-//       .then()
-//           .statusCode(400); // Expecting 400 Bad Request
-//   }
 
     // USERS TESTS
     @Test
@@ -141,7 +120,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/users")
+                .post(USERS_ENDPOINT)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -154,7 +133,7 @@ public class FakeStoreApiCrudTests {
     @Order(6)
     public void testGetUserById_HappyPath() {
         given()
-                .get("/users/" + createdUserId)
+                .get(USERS_ENDPOINT + "/" + createdUserId)
                 .then()
                 .statusCode(200);
     }
@@ -162,7 +141,7 @@ public class FakeStoreApiCrudTests {
     @Test
     public void testGetUserById_UnhappyPath_BadRequest() {
         given()
-                .get("/users/invalid-id")
+                .get(USERS_ENDPOINT + "/invalid-id")
                 .then()
                 .statusCode(400);
     }
@@ -180,7 +159,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .put("/users/" + createdUserId)
+                .put(USERS_ENDPOINT + "/" + createdUserId)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -191,7 +170,7 @@ public class FakeStoreApiCrudTests {
     @Test
     public void testDeleteUser_UnhappyPath_BadRequest() {
         given()
-                .delete("/users/invalid-id")
+                .delete(USERS_ENDPOINT + "/invalid-id")
                 .then()
                 .statusCode(400);
     }
@@ -200,7 +179,7 @@ public class FakeStoreApiCrudTests {
     @Order(8)
     public void testDeleteUser_HappyPath() {
         given()
-                .delete("/users/" + createdUserId)
+                .delete(USERS_ENDPOINT + "/" + createdUserId)
                 .then()
                 .statusCode(200);
     }
@@ -220,7 +199,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/carts")
+                .post(CARTS_ENDPOINT)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -229,25 +208,11 @@ public class FakeStoreApiCrudTests {
         assertThat(createdCartId).isPositive();
     }
 
-// @Test
-// public void testCreateCart_UnhappyPath_EmptyProducts_1() {
-//     // Create a cart with an empty products array
-//     String cartJson = "{ \"userId\": 1, \"products\": [] }";
-//
-//     given()
-//         .contentType("application/json")
-//         .body(cartJson)
-//     .when()
-//         .post("/carts")
-//     .then()
-//         .statusCode(400); // Expecting 400 Bad Request
-// }
-
     @Test
     @Order(10)
     public void testGetCartById_HappyPath() {
         given()
-                .get("/carts/" + createdCartId)
+                .get(CARTS_ENDPOINT + "/" + createdCartId)
                 .then()
                 .statusCode(200);
     }
@@ -255,7 +220,7 @@ public class FakeStoreApiCrudTests {
     @Test
     public void testGetCartById_UnhappyPath_BadRequest() {
         given()
-                .get("/carts/invalid-id")
+                .get(CARTS_ENDPOINT + "/invalid-id")
                 .then()
                 .statusCode(400);
     }
@@ -274,7 +239,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .put("/carts/" + createdCartId)
+                .put(CARTS_ENDPOINT + "/" + createdCartId)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -285,7 +250,7 @@ public class FakeStoreApiCrudTests {
     @Test
     public void testDeleteCart_UnhappyPath_BadRequest() {
         given()
-                .delete("/carts/invalid-id")
+                .delete(CARTS_ENDPOINT + "/invalid-id")
                 .then()
                 .statusCode(400);
     }
@@ -294,7 +259,7 @@ public class FakeStoreApiCrudTests {
     @Order(12)
     public void testDeleteCart_HappyPath() {
         given()
-                .delete("/carts/" + createdCartId)
+                .delete(CARTS_ENDPOINT + "/" + createdCartId)
                 .then()
                 .statusCode(200);
     }
@@ -312,7 +277,7 @@ public class FakeStoreApiCrudTests {
         Response response = given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/auth/login")
+                .post(AUTH_ENDPOINT)
                 .then()
                 .statusCode(200)
                 .extract().response();
@@ -333,7 +298,7 @@ public class FakeStoreApiCrudTests {
         given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/auth/login")
+                .post(AUTH_ENDPOINT)
                 .then()
                 .statusCode(401);
     }
@@ -349,7 +314,7 @@ public class FakeStoreApiCrudTests {
         given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/auth/login")
+                .post(AUTH_ENDPOINT)
                 .then()
                 .statusCode(400);
     }
@@ -365,7 +330,7 @@ public class FakeStoreApiCrudTests {
         given()
                 .contentType(ContentType.JSON)
                 .body(payload)
-                .post("/auth/login")
+                .post(AUTH_ENDPOINT)
                 .then()
                 .statusCode(400);
     }
