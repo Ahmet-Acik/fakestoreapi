@@ -327,6 +327,15 @@ public class FakeStoreApiCrudTests {
                 .statusCode(400);
     }
 
+    @Test
+    public void testGetAllCarts_UnhappyPath_EmptyResponse() {
+        given()
+                .get(CARTS_ENDPOINT)
+                .then()
+                .statusCode(200)
+                .body("isEmpty()", equalTo(false));
+    }
+
 
     // AUTH TEST
     @Test
