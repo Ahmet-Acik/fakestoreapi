@@ -7,12 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 
 public class CartControllerUnhappyPaths {
 
+    private static final String BASE_URI = "https://fakestoreapi.com";
+    private static final String CARTS_ENDPOINT = "/carts";
+
     @BeforeAll
     public static void setup() {
-        RestAssured.baseURI = "https://fakestoreapi.com";
+        RestAssured.baseURI = BASE_URI;
     }
 
     @Test
@@ -20,7 +24,7 @@ public class CartControllerUnhappyPaths {
         given()
                 .queryParam("startdate", "invalid-date")
                 .when()
-                .get("/carts")
+                .get(CARTS_ENDPOINT)
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("date format is not correct. it should be in yyyy-mm-dd format"));
@@ -31,7 +35,7 @@ public class CartControllerUnhappyPaths {
         given()
                 .pathParam("userid", "invalid-id")
                 .when()
-                .get("/carts/user/{userid}")
+                .get(CARTS_ENDPOINT + "/user/{userid}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("user id should be provided"));
@@ -42,7 +46,7 @@ public class CartControllerUnhappyPaths {
         given()
                 .pathParam("id", "invalid-id")
                 .when()
-                .get("/carts/{id}")
+                .get(CARTS_ENDPOINT + "/{id}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("cart id should be provided"));
@@ -54,11 +58,12 @@ public class CartControllerUnhappyPaths {
                 .contentType(ContentType.JSON)
                 .body("{}") // Provide an empty JSON object instead of null
                 .when()
-                .post("/carts")
+                .post(CARTS_ENDPOINT)
                 .then()
 //                .statusCode(400) // Assuming the API returns 400 for invalid data
-                .statusCode(200)
-                .body("message", equalTo(null));
+//                .body("message", equalTo("Invalid data provided"));
+                .statusCode(200) //  the API returns 200 for invalid data
+                .body("message", nullValue());
     }
 
     @Test
@@ -68,7 +73,7 @@ public class CartControllerUnhappyPaths {
                 .body("{}")
                 .pathParam("id", "null")
                 .when()
-                .put("/carts/{id}")
+                .put(CARTS_ENDPOINT + "/{id}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("something went wrong! check your sent data"));
@@ -79,7 +84,7 @@ public class CartControllerUnhappyPaths {
         given()
                 .pathParam("id", "null")
                 .when()
-                .delete("/carts/{id}")
+                .delete(CARTS_ENDPOINT + "/{id}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("cart id should be provided"));
