@@ -1,66 +1,67 @@
 package org.ahmet.fakeapistore;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+    import io.restassured.RestAssured;
+    import io.restassured.http.ContentType;
+    import org.junit.jupiter.api.BeforeAll;
+    import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+    import static io.restassured.RestAssured.given;
+    import static org.hamcrest.Matchers.equalTo;
 
-public class UserControllerUnhappyPaths {
+    public class UserControllerUnhappyPaths {
 
-    @BeforeAll
-    public static void setup() {
-        RestAssured.baseURI = "https://fakestoreapi.com";
-    }
+        private static final String BASE_URI = "https://fakestoreapi.com";
+        private static final String USERS_ENDPOINT = "/users";
 
-    @Test
-    public void shouldReturnErrorForInvalidUserIdInGetUser() {
-        given()
+        @BeforeAll
+        public static void setup() {
+            RestAssured.baseURI = BASE_URI;
+        }
+
+        @Test
+        public void shouldReturnErrorForInvalidUserIdInGetUser() {
+            given()
                 .pathParam("id", "invalid-id")
                 .when()
-                .get("/users/{id}")
+                .get(USERS_ENDPOINT + "/{id}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("user id should be provided"));
-    }
+        }
 
-    @Test
-    public void shouldReturnErrorForUndefinedBodyInAddUser() {
-        given()
+        @Test
+        public void shouldReturnErrorForUndefinedBodyInAddUser() {
+            given()
                 .contentType(ContentType.JSON)
-                .body("{}") // Provide an empty JSON object instead of null
+                .body("{}")
                 .when()
-                .post("/users")
+                .post(USERS_ENDPOINT)
                 .then()
-//            .statusCode(400) // Assuming the API returns 400 for invalid data
-//            .body("message", equalTo("data is undefined")); // Uncomment this line if the API returns 400 for invalid data
                 .statusCode(200)
                 .body("message", equalTo(null));
-    }
+        }
 
-    @Test
-    public void shouldReturnErrorForUndefinedBodyOrNullIdInEditUser() {
-        given()
+        @Test
+        public void shouldReturnErrorForUndefinedBodyOrNullIdInEditUser() {
+            given()
                 .contentType(ContentType.JSON)
                 .body("{}")
                 .pathParam("id", "null")
                 .when()
-                .put("/users/{id}")
+                .put(USERS_ENDPOINT + "/{id}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("something went wrong! check your sent data"));
-    }
+        }
 
-    @Test
-    public void shouldReturnErrorForNullIdInDeleteUser() {
-        given()
+        @Test
+        public void shouldReturnErrorForNullIdInDeleteUser() {
+            given()
                 .pathParam("id", "null")
                 .when()
-                .delete("/users/{id}")
+                .delete(USERS_ENDPOINT + "/{id}")
                 .then()
                 .statusCode(400)
                 .body("message", equalTo("user id should be provided"));
+        }
     }
-}
