@@ -194,6 +194,15 @@ public class FakeStoreApiCrudTests {
                 .statusCode(200);
     }
 
+    @Test
+    public void testGetAllUsers_HappyPath() {
+        given()
+                .get(USERS_ENDPOINT)
+                .then()
+                .statusCode(200);
+    }
+
+
     // CARTS TESTS
     @Test
     @Order(9)
