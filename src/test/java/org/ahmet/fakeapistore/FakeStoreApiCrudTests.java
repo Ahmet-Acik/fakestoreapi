@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.hamcrest.Matchers.equalTo;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FakeStoreApiCrudTests {
@@ -208,6 +209,15 @@ public class FakeStoreApiCrudTests {
                 .get(USERS_ENDPOINT + "/invalid-id")
                 .then()
                 .statusCode(400);
+    }
+
+    @Test
+    public void testGetAllUsers_UnhappyPath_EmptyResponse() {
+        given()
+                .get(USERS_ENDPOINT)
+                .then()
+                .statusCode(200)
+                .body("isEmpty()", equalTo(false));
     }
 
 
