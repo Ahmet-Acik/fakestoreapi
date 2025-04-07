@@ -202,6 +202,15 @@ public class FakeStoreApiCrudTests {
                 .statusCode(200);
     }
 
+    @Test
+    public void testGetAllUsers_UnhappyPath_BadRequest() {
+        given()
+                .get(USERS_ENDPOINT + "/invalid-id")
+                .then()
+                .statusCode(400);
+    }
+
+
 
     // CARTS TESTS
     @Test
