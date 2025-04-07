@@ -334,4 +334,21 @@ public class FakeStoreApiCrudTests {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    public void testLogin_UnhappyPath_EmptyUsername() {
+        String payload = """
+                {
+                    "username": "",
+                    "password": "83r5^_"
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(400);
+    }
 }
