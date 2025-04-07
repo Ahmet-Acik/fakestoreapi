@@ -351,4 +351,40 @@ public class FakeStoreApiCrudTests {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    public void testLogin_UnhappyPath_EmptyPassword() {
+        String payload = """
+                {
+                    "username": "mor_2314",
+                    "password": ""
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(400);
+    }
+
+    // sql injection
+    @Test
+    public void testLogin_UnhappyPath_SQLInjection() {
+        String payload = """
+                {
+                    "username": "' OR '1'='1",
+                    "password": "' OR '1'='1"
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(401);
+    }
+
 }
