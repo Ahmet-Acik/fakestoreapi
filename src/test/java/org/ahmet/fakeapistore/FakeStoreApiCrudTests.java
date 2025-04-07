@@ -311,6 +311,15 @@ public class FakeStoreApiCrudTests {
                 .statusCode(200);
     }
 
+    @Test
+    public void testGetAllCarts_HappyPath() {
+        given()
+                .get(CARTS_ENDPOINT)
+                .then()
+                .statusCode(200);
+    }
+
+
     // AUTH TEST
     @Test
     public void testLogin_HappyPath() {
