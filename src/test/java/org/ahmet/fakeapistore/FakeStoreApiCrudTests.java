@@ -319,6 +319,14 @@ public class FakeStoreApiCrudTests {
                 .statusCode(200);
     }
 
+    @Test
+    public void testGetAllCarts_UnhappyPath_BadRequest() {
+        given()
+                .get(CARTS_ENDPOINT + "/invalid-id")
+                .then()
+                .statusCode(400);
+    }
+
 
     // AUTH TEST
     @Test
