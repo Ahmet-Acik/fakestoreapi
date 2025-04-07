@@ -404,5 +404,14 @@ public class FakeStoreApiCrudTests {
                 .statusCode(401);
     }
 
+    @Test
+    public void testLogin_UnhappyPath_EmptyBody() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("{}")
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(400);
+    }
 
 }
