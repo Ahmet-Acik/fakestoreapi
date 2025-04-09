@@ -500,4 +500,38 @@ public class FakeStoreApiCrudTests {
     }
 
 
+    @Test
+    public void testLogin_UnhappyPath_NullUsername() {
+        String payload = """
+                {
+                    "username": null,
+                    "password": "83r5^_"
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testLogin_UnhappyPath_NullPassword() {
+        String payload = """
+                {
+                    "username": "mor_2314",
+                    "password": null
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(400);
+    }
+
 }
