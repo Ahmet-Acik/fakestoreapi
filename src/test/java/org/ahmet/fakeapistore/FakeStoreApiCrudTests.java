@@ -315,6 +315,25 @@ public class FakeStoreApiCrudTests {
     }
 
     @Test
+    public void testUpdateCart_UnhappyPath_BadRequest() {
+        String payload = """
+                {
+                    "userId": 1,
+                    "date": "2023-01-02",
+                    "products": [{"productId": 2, "quantity": 2}]
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .put(CARTS_ENDPOINT + "/invalid-id")
+                .then()
+                .statusCode(400);
+    }
+
+
+    @Test
     public void testDeleteCart_UnhappyPath_BadRequest() {
         given()
                 .delete(CARTS_ENDPOINT + "/invalid-id")
