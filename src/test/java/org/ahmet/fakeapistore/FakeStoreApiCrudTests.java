@@ -5,6 +5,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
+import java.util.Optional;
+
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -110,7 +112,6 @@ public class FakeStoreApiCrudTests {
                 .then()
                 .statusCode(200);
     }
-
 
 
     // USERS TESTS
@@ -459,6 +460,7 @@ public class FakeStoreApiCrudTests {
                 .then()
                 .statusCode(401);
     }
+
     // XSS
     @Test
     public void testLogin_UnhappyPath_XSS() {
@@ -486,5 +488,16 @@ public class FakeStoreApiCrudTests {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    public void testLogin_UnhappyPath_NullBody() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("{}") // Simulating an empty JSON body
+                .post(AUTH_ENDPOINT)
+                .then()
+                .statusCode(400);
+    }
+
 
 }
