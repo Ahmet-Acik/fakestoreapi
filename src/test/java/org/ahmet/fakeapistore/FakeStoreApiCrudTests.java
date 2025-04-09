@@ -231,6 +231,16 @@ public class FakeStoreApiCrudTests {
                 .body("isEmpty()", equalTo(false));
     }
 
+    @Test
+    public void testGetAllUsers_UnhappyPath_EmptyResponse_3() {
+        given()
+                .get(USERS_ENDPOINT)
+                .then()
+                .statusCode(200)
+                .body("isEmpty()", equalTo(false));
+    }
+
+
 
     // CARTS TESTS
     @Test
