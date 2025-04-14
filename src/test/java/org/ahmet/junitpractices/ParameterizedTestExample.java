@@ -40,6 +40,13 @@ public class ParameterizedTestExample {
         return new String[]{"Test", "Example", "ParameterizedTest", "JUnit5"}; // Returns an array of non-empty strings
     }
 
-
+    // Testing data from an external CSV file
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
+    // Reads data from 'data.csv', skipping the first line (header)
+    public void testCsvFileSource(String name, int age) {
+        assertTrue(name.length() > 0, "Name is empty"); // Asserts that the name is not empty
+        assertTrue(age > 0, "Age is not positive"); // Asserts that the age is a positive number
+    }
 
 }
