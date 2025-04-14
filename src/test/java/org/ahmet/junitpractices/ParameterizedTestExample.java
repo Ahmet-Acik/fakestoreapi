@@ -1,11 +1,11 @@
 package org.ahmet.junitpractices;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParameterizedTestExample {
@@ -47,6 +47,28 @@ public class ParameterizedTestExample {
     public void testCsvFileSource(String name, int age) {
         assertTrue(name.length() > 0, "Name is empty"); // Asserts that the name is not empty
         assertTrue(age > 0, "Age is not positive"); // Asserts that the age is a positive number
+    }
+
+    // Testing addition with a variety of cases using a custom ArgumentsProvider
+    @ParameterizedTest
+    @ArgumentsSource(ComplexAdditionArgumentsProvider.class) // Uses a custom provider for test data
+    public void testComplexAddition(int a, int b, int expectedSum) {
+        int actualSum = a + b; // Calculates the sum of a and b
+        assertEquals(expectedSum, actualSum, "Sum is incorrect"); // Asserts that the calculated sum matches the expected sum
+    }
+
+    // Custom ArgumentsProvider to supply more complex test data
+    static class ComplexAdditionArgumentsProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(org.junit.jupiter.api.extension.ExtensionContext context) {
+            return Stream.of(
+                    Arguments.of(1, 2, 3),         // Simple case
+                    Arguments.of(-1, -2, -3),     // Negative numbers
+                    Arguments.of(0, 0, 0),        // Zero case
+                    Arguments.of(1000, 2000, 3000), // Large numbers
+                    Arguments.of(-5, 5, 0)        // Mixed positive and negative
+            );
+        }
     }
 
 }
