@@ -5,8 +5,7 @@ import org.junit.jupiter.params.provider.*;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ParameterizedTestExample {
 
@@ -69,6 +68,17 @@ public class ParameterizedTestExample {
                     Arguments.of(-5, 5, 0)        // Mixed positive and negative
             );
         }
+    }
+
+    enum Status {
+        ACTIVE, INACTIVE, PENDING
+    }
+
+    // Testing all enum constants
+    @ParameterizedTest
+    @EnumSource(Status.class) // Provides all constants of the Status enum
+    public void testEnumValues(Status status) {
+        assertNotNull(status, "Enum value is null"); // Asserts that the enum value is not null
     }
 
 }
