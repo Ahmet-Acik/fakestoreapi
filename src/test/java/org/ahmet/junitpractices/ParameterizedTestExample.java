@@ -27,6 +27,18 @@ public class ParameterizedTestExample {
         assertTrue(actualSum == expectedSum, "Sum is incorrect"); // Asserts that the calculated sum matches the expected sum
     }
 
+// Testing the length of strings using inline CSV data
+    @ParameterizedTest
+    @CsvSource({
+            "apple, 5",
+            "banana, 6",
+            "cherry, 6"
+    })
+    public void testStringAndLength(String fruit, int length) {
+        assertTrue(fruit.length() == length, "Length does not match"); // Asserts that the string length matches
+    }
+
+
     // Testing if strings are non-empty using a method as the data source
     @ParameterizedTest
     @MethodSource("provideNonEmptyStrings") // Uses a method to provide test data
