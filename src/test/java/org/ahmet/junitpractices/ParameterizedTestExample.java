@@ -28,5 +28,18 @@ public class ParameterizedTestExample {
         assertTrue(actualSum == expectedSum, "Sum is incorrect"); // Asserts that the calculated sum matches the expected sum
     }
 
+    // Testing if strings are non-empty using a method as the data source
+    @ParameterizedTest
+    @MethodSource("provideNonEmptyStrings") // Uses a method to provide test data
+    public void testNonEmptyStrings(String str) {
+        assertTrue(str.length() > 0, "The string \"" + str + "\" is unexpectedly empty."); // Asserts that the string is not empty
+    }
+
+    // Provides a set of non-empty strings for the test above
+    private static String[] provideNonEmptyStrings() {
+        return new String[]{"Test", "Example", "ParameterizedTest", "JUnit5"}; // Returns an array of non-empty strings
+    }
+
+
 
 }
